@@ -1,0 +1,252 @@
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                                                  %
+% Author: Francesco Kriegel (francesco.kriegel@tu-dresden.de)                                      %
+%                                                                                                  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\NeedsTeXFormat{LaTeX2e}%
+\ProvidesPackage{beautiful-latex-macros}[2017/02/08 v1.0 Beautiful LaTeX Macros]%
+%
+% \usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xparse}
+\usepackage{scalerel}
+% \usepackage{stmaryrd}
+\usepackage{xifthen}
+\usepackage{bm}
+\usepackage{bbm}
+\let\mathbb\mathbbm
+\usepackage{xspace}
+\usepackage{color}
+
+\makeatletter
+  \let\Bbb\undefined
+  
+  \def\math@Alphabet{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+  \def\math@alphabet{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}
+  \newcommand{\math@def}[2]{\expandafter#1\expandafter{\csname#2\endcsname}}
+  \newcommand{\math@forcsvlist}[2]{\expandafter\forcsvlist\expandafter#1\expandafter{#2}}
+  
+  \newcommand{\math@defmc}[1]{\math@def{\newcommand}{#1mc}{\ensuremath{\mathcal{#1}}\xspace}}
+  \newcommand{\math@defmf}[1]{\math@def{\newcommand}{#1mf}{\ensuremath{\mathfrak{#1}}\xspace}}
+  \newcommand{\math@defbb}[1]{\math@def{\newcommand}{#1bb}{\ensuremath{\mathbb{#1}}\xspace}}
+  \newcommand{\math@defbf}[1]{\math@def{\newcommand}{#1bf}{\ensuremath{\mathbf{#1}}\xspace}}
+  \newcommand{\math@deful}[1]{\math@def{\newcommand}{#1ul}{\ensuremath{\underline{#1}}\xspace}}
+  
+  \math@forcsvlist{\math@defmc}{\math@Alphabet}
+  \math@forcsvlist{\math@defmf}{\math@Alphabet}
+  \math@forcsvlist{\math@defbb}{\math@Alphabet}
+  \math@forcsvlist{\math@defbf}{\math@Alphabet}
+  \math@forcsvlist{\math@deful}{\math@Alphabet}
+  \math@forcsvlist{\math@defmc}{\math@alphabet}
+  \math@forcsvlist{\math@defmf}{\math@alphabet}
+  \math@forcsvlist{\math@defbb}{\math@alphabet}
+  \math@forcsvlist{\math@defbf}{\math@alphabet}
+  \math@forcsvlist{\math@deful}{\math@alphabet}
+  
+  \let\Xmc\undefined % ugly symbol
+  
+  \let\log\undefined
+  \let\max\undefined
+  \let\min\undefined
+  \def\math@mopslist{log,min,max}
+  \newcommand{\math@defmops}[1]{\math@def{\DeclareMathOperator}{#1}{\mathsf{#1}}}
+  \math@forcsvlist{\math@defmops}{\math@mopslist}
+
+  \newcommand{\mathcomma}{,\mskip 6mu plus 6mu minus 3mu \relax}
+  \newcommand{\mathcommas}[1]{
+    \begingroup
+      \booltrue{math@commas@first}
+      \math@commas@parser{\math@commas@append}{#1}
+    \endgroup
+  }
+  \newbool{math@commas@first}
+  \DeclareListParser*{\math@commas@parser}{,}
+  \newcommand{\math@commas@append}[1]{\ifbool{math@commas@first}{\boolfalse{math@commas@first}#1}{\mathcomma#1}}
+  
+  \newcommand{\math@Inbraces@outerspace}{\mskip 3mu plus 3mu \relax}
+  \newcommand{\math@Inbraces@innerspace}{\mskip 5mu plus 5mu \relax}
+  \newcommand{\math@inbraces}[4][0]{
+    \ifthenelse{\equal{#1}{0}}{\ensuremath{\left#2#3\right#4}
+    }{\ifthenelse{\equal{#1}{1}}{\ensuremath{#2#3#4}
+      }{\ifthenelse{\equal{#1}{2}}{\ensuremath{\big#2#3\big#4}
+        }{\ifthenelse{\equal{#1}{3}}{\ensuremath{\Big#2#3\Big#4}
+          }{\ifthenelse{\equal{#1}{4}}{\ensuremath{\bigg#2#3\bigg#4}
+            }{\ifthenelse{\equal{#1}{5}}{\ensuremath{\Bigg#2#3\Bigg#4}
+              }{Error}}}}}}}
+  \newcommand{\math@Inbraces}[6][0]{
+    \ifthenelse{\equal{#1}{0}}{\ensuremath{\left#2\math@Inbraces@outerspace#3\math@Inbraces@innerspace\middle#4\math@Inbraces@innerspace#5\math@Inbraces@outerspace\right#6}
+    }{\ifthenelse{\equal{#1}{1}}{\ensuremath{#2\math@Inbraces@outerspace#3\math@Inbraces@innerspace#4\math@Inbraces@innerspace#5\math@Inbraces@outerspace#6}
+      }{\ifthenelse{\equal{#1}{2}}{\ensuremath{\big#2\math@Inbraces@outerspace#3\math@Inbraces@innerspace\big#4\math@Inbraces@innerspace#5\math@Inbraces@outerspace\big#6}
+        }{\ifthenelse{\equal{#1}{3}}{\ensuremath{\Big#2\math@Inbraces@outerspace#3\math@Inbraces@innerspace\Big#4\math@Inbraces@innerspace#5\math@Inbraces@outerspace\Big#6}
+          }{\ifthenelse{\equal{#1}{4}}{\ensuremath{\bigg#2\math@Inbraces@outerspace#3\math@Inbraces@innerspace\bigg#4\math@Inbraces@innerspace#5\math@Inbraces@outerspace\bigg#6}
+            }{\ifthenelse{\equal{#1}{5}}{\ensuremath{\Bigg#2\math@Inbraces@outerspace#3\math@Inbraces@innerspace\Bigg#4\math@Inbraces@innerspace#5\math@Inbraces@outerspace\Bigg#6}
+              }{Error}}}}}}}
+  
+  \newcommand{\card}[2][1]{\math@inbraces[#1]{|}{#2}{|}}
+  \newcommand{\norm}[2][1]{\card[#1]{\card[#1]{#2}}}
+  \newcommand{\math@menge}[3][1]{\math@Inbraces[#1]{\{}{#2}{|}{#3}{\}}}
+  \newcommand{\math@meng}[2][1]{\math@inbraces[#1]{\{}{#2}{\}}}
+  \NewDocumentCommand{\Menge}{ s O{1} m g }{
+    \IfBooleanTF{#1}{
+      \IfNoValueTF{#4}{
+        \math@meng[0]{#3}
+      }{
+        \math@menge[0]{#3}{#4}
+      }
+    }{
+      \IfNoValueTF{#4}{
+        \math@meng[#2]{#3}
+      }{
+        \math@menge[#2]{#3}{#4}
+      }
+    }
+  }
+  
+  \newcommand{\raisemath}[1]{\mathpalette{\raisem@th{#1}}}
+  \newcommand{\raisem@th}[3]{\raisebox{#1}{$#2#3$}}
+\makeatother
+
+\DeclareMathOperator{\Powerset}{\scaleobj{1.3}{\wp}}
+
+\newcommand{\symdiff}{\mathbin{\triangle}}
+%%% http://tex.stackexchange.com/questions/38670/broken-arrow-symbol (modified)
+\makeatletter
+  \newcommand{\dashedrightarrow}{\mathrel{%
+    \settowidth{\@tempdima}{$\mathord{\rightarrow}$}\mathord{\rightarrow}% typeset arrow
+    \makebox[-\@tempdima]{\hskip-0.5ex\color{white}\rule[0.4ex]{0.5ex}{0.3ex}}% typeset overlay
+    \phantom{\mathord{\rightarrow}}% advance appropriate horizontal distance
+  }}
+  \let\toP\dashedrightarrow
+  \let\dashedto\dashedrightarrow
+\makeatother
+
+\let\savebowtie\bowtie
+\let\bowtie\undefined
+\def\bowtie{\mathrel{\savebowtie}}
+\newcommand{\synentails}{\mathrel{\mathrel{|}\joinrel\mathrel{-}}}
+\let\derives\synentails
+\let\entails\models
+\let\implies\Rightarrow
+\let\iff\Leftrightarrow
+
+\newcommand{\quantifier}[1][\mathsf{Q}]{{
+  \mathchoice{\raisebox{\depth}{\rotatebox[origin=c]{180}{$\displaystyle\vphantom{Ag}#1$}}}
+    {\raisebox{\depth}{\rotatebox[origin=c]{180}{$\textstyle\vphantom{Ag}#1$}}}
+    {\raisebox{\depth}{\rotatebox[origin=c]{180}{$\scriptstyle\vphantom{Ag}#1$}}}
+    {\raisebox{\depth}{\rotatebox[origin=c]{180}{$\scriptscriptstyle\vphantom{Ag}#1$}}}
+}}
+\def\exists{{\quantifier[\mathsf{E}]}}
+\def\forall{{\quantifier[\mathsf{A}]}}
+\def\probably{{\quantifier[\mathsf{P}]}}
+\newcommand{\Quantifier}{\quantifier\,}
+\newcommand{\Exists}{\exists\,}
+\newcommand{\Forall}{\forall\,}
+\newcommand{\Probably}{\probably\,}
+
+\newcommand{\smashupper}[2][0.618pt]{^{\raisemath{-#1}{\smash{#2}}}}
+\newcommand{\smashlower}[2][0.618pt]{_{\raisemath{#1}{\smash{#2}}}}
+
+\makeatletter
+  \DeclareListParser*{\@parseDL}{}
+  \newcommand{\@kernDL}[1]{#1\mkern-1.618mu}
+  \newcommand{\@defDL}[1]{\@parseDL{\@kernDL}{#1}\mkern1.618mu}
+  \NewDocumentCommand{\@newDL}{m m m m}{%
+    \math@def{\newcommand}{#1}{%
+      \ensuremath{%
+        \mathcal{\@defDL{#2}}%
+        \IfValueT{#3}{\smashupper{#3}}%
+        \IfValueT{#4}{\smashlower{#4}}%
+      }\xspace%
+    }
+    \math@def{\newcommand}{b#1}{%
+      \ensuremath{%
+        \bm{%
+          \mathcal{\@defDL{#2}}%
+          \IfValueT{#3}{\smashupper{#3}}%
+          \IfValueT{#4}{\smashlower{#4}}%
+        }%
+      }\xspace%
+    }
+  }
+  \NewDocumentCommand{\newDL}{m m e{^_}}{\@newDL{#1}{#2}#3}
+\makeatother
+
+\newcommand{\NCNR}{\ensuremath{(N_C,N_R)}\xspace}
+
+\newDL{EL}{EL}
+\newDL{ELgfp}{EL}_{\textsf{gfp}}
+\newDL{ELbot}{EL}^{\!\bot}
+\newDL{ELbotgfp}{EL}^{\!\bot}_{\textsf{gfp}}
+
+\newDL{FLE}{FLE}
+\newDL{FLEgfp}{FLE}_{\textsf{gfp}}
+\newDL{ALE}{ALE}
+\newDL{ALC}{ALC}
+
+\newDL{SHOIN}{SHOIN}
+\newDL{SROIQ}{SROIQ}
+
+\newcommand{\exsim}{\exists^{\textnormal{\textsf{sim}}}}
+
+\newcommand{\ROLECONSTRUCTOR}[2]{\mathop{#1\,#2.}}
+\newcommand{\QR}[1]{\ROLECONSTRUCTOR\quantifier{#1}}
+\newcommand{\VR}[1]{\ROLECONSTRUCTOR\forall{#1}}
+\newcommand{\ER}[1]{\ROLECONSTRUCTOR\exists{#1}}
+\newcommand{\ES}[1][]{
+  \ifthenelse{\isempty{#1}}{
+    \mathop{\exsim}
+  }{
+    \ROLECONSTRUCTOR\exsim{#1}
+  }
+}
+\newcommand{\LR}[2]{\ROLECONSTRUCTOR{\exists\leq#1.}{#2}}
+\newcommand{\GR}[2]{\ROLECONSTRUCTOR{\exists\geq#1.}{#2}}
+\newcommand{\ULR}[2]{\exists\leq#1.\,#2}
+\newcommand{\UGR}[2]{\exists\geq#1.\,#2}
+\newcommand{\SR}[1]{\ER{#1}\Self}
+\newcommand{\Self}{\ensuremath{\textsf{Self}}\xspace}
+\newcommand{\PR}[2]{\mathop{\probably#1.}#2}
+\newcommand{\PGR}[2]{\mathop{\probably\geq#1.}#2}
+
+
+\newcommand{\overlay}[3][0pt]{
+  \begingroup
+    \mathchoice{
+      \bgroup
+        \ooalign{$\displaystyle#2$\cr
+          \hidewidth\raisebox{#1}{$\displaystyle#3$}\hidewidth}
+      \egroup
+    }{
+      \bgroup
+        \ooalign{$\textstyle#2$\cr
+          \hidewidth\raisebox{#1}{$\textstyle#3$}\hidewidth}
+      \egroup
+    }{
+      \bgroup
+        \ooalign{$\scriptstyle#2$\cr
+          \hidewidth\raisebox{#1}{$\scriptstyle#3$}\hidewidth}
+      \egroup
+    }{
+      \bgroup
+        \ooalign{$\scriptscriptstyle#2$\cr
+          \hidewidth\raisebox{#1}{$\scriptscriptstyle#3$}\hidewidth}
+      \egroup
+    }
+  \endgroup
+}
+\newcommand{\sqin}{\mathrel{\overlay{\sqsubset}{-}}}
+\newcommand{\sqni}{\mathrel{\overlay{\sqsupset}{-}}}
+
+% (c) Stefan Knauf, http://golatex.de/zeichen-sqsubsetneq-basteln-t8653.html
+\DeclareRobustCommand\sqsubsetneq{\mathrel{\sqsubseteq\kern-0.92em\raise-0.15em\hbox{\rotatebox{313}{\scalebox{1.1}[0.75]{\(\shortmid\)}}}\scalebox{0.3}[1]{\
+}}}
+\DeclareRobustCommand\simto{\mathrel{\lower0.3ex\hbox{$\stackrel{\smash{\lower0.5ex\hbox{\scalebox{0.8}{$\rightharpoonup$}}}}{\sim}$}}}
+\let\lcs\vee
+\let\biglcs\bigvee
+
+\newcommand{\PTime}{\textnormal{\textsf{PTime}}\xspace}
+\newcommand{\PSpace}{\textnormal{\textsf{PSpace}}\xspace}
+\newcommand{\ExpTime}{\textnormal{\textsf{ExpTime}}\xspace}
