@@ -54,6 +54,7 @@
   \def\math@mopslist{log,min,max}
   \newcommand{\math@defmops}[1]{\math@def{\DeclareMathOperator}{#1}{\mathsf{#1}}}
   \math@forcsvlist{\math@defmops}{\math@mopslist}
+  \DeclareRobustCommand{\DeclareMathOperators}[1]{\math@forcsvlist{\math@defmops}{#1}}
 
   \newcommand{\mathcomma}{,\mskip 6mu plus 6mu minus 3mu \relax}
   \newcommand{\mathcommas}[1]{
@@ -163,11 +164,11 @@
     }
     \math@def{\newcommand}{b#1}{%
       \ensuremath{%
-        \bm{%
+        \bm{{%
           \mathcal{\@defDL{#2}}%
           \IfValueT{#3}{\smashupper{#3}}%
           \IfValueT{#4}{\smashlower{#4}}%
-        }%
+        }}%
       }\xspace%
     }
   }
