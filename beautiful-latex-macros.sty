@@ -16,6 +16,11 @@
 % \RequirePackage{stmaryrd}
 \RequirePackage{xifthen}
 \RequirePackage{bm}
+\makeatletter
+  \let\math@bm\bm
+  \let\bm\undefined
+  \newcommand{\bm}[1]{\math@bm{{#1}}}
+\makeatother
 \RequirePackage{bbm}
 \let\mathbb\mathbbm
 \RequirePackage{xspace}
